@@ -1,12 +1,31 @@
 
 @startuml
+title System Class
 
-namespace bertini{
-class System{
+Interface System{
 
+--public--
+parse() //takes input stream, breaks into declarations, functions, etc., and calls *.parse() on each
+eval()  //eval funcs and their gradients:  update prec on numbers, populate vars and pathvar, eval params, eval subfuncs (in order), eval funcs, eval Jv and Jp
+eval_system() //system only
+eval_Jacobian() //Jacobian only
+get_precision()
+set_precision()
+get_number_functions()
+get_number_variables()
+//SOME FUNCTIONS RELATED TO SOLUTIONS
 
+--private--
+function *functions
+function *subfunctions //user-defined functions should be handled as subfunctions
+function *parameters  //depend only on pathvar (and numbers)
 
-} 
+symbol *variables //symbol might not be the right name
+symbol pathvariable
+symbol *numbers
+
+point *solutions  //stores all known solutions of system.  Perhaps not an array of points.  Might want more data stored directly with solutions, not at system level.
 }
+
 
 @enduml

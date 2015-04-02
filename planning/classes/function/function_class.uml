@@ -1,0 +1,144 @@
+@startuml
+title Function Class and Nodes
+
+
+
+
+
+	Function o-- Node
+	
+	Node <|-- BinaryOperator
+	Node <|-- UnaryOperator
+	Node <|-- N_aryOperator
+	Node <|-- Symbol
+	
+	N_aryOperator <|-- Plus
+	N_aryOperator <|-- Minus
+	N_aryOperator <|-- Times
+	BinaryOperator <|-- Divide
+	UnaryOperator <|-- Negate
+	UnaryOperator <|-- Exp
+	UnaryOperator <|-- Log
+	UnaryOperator <|-- Sine
+	UnaryOperator <|-- Cosine
+	N_aryOperator <|-- UserDefined
+	
+	Symbol <|-- Variable
+	Symbol <|-- PathVariable
+	Symbol <|-- Coefficient
+	
+	 
+	 
+	 
+	
+	interface Node {
+		disallow empty instantiation?  
+		this might be achieved by pure virtualism
+		--public--
+            	+{abstract} virtual SetPrecision(int prec)
+            	+{abstract} virtual Evaluate() //Returns Symbol?
+            	+{abstract} virtual String()
+            	+{abstract} virtual addLeaf(Node* leaf)
+        --private--      	
+            	-Node()  private so that empty construction prohibited.  
+            	this may help protect against errors in parsing
+	}
+	
+	
+	
+	
+	
+	interface BinaryOperator {
+		--public--
+		virtual addLeaf(Node* leaf)
+		--private--
+		-Node* leftnode_
+		-Node* rightnode_
+	}
+	
+	interface UnaryOperator {
+		--public--
+		virtual addLeaf(Node* leaf)
+		--private--
+		-Node* node_
+	}
+	
+	interface N_aryOperator {
+		--public--
+		virtual addLeaf(Node* leaf)
+		--private--
+		-std::vector<Node*> nodes_
+	}
+	interface Symbol {
+	why do we need this?
+	}
+
+	
+	
+	
+	
+	
+	
+	class Plus {
+		
+	}
+	
+	class Minus {
+		
+	}
+	
+	class Negate {
+		
+	}
+	
+	class Times {
+		
+	}
+	
+	
+	class Divide {
+		
+	}
+
+
+
+
+
+	
+	
+	class Variable {
+	}
+	
+	
+	
+	class Function {
+		A function is more than a tree, so perhaps this diagram should be adapted?
+		Perhaps a function class that contains one or more instances of an eval_tree class as a member?
+
+		WARNING:  No claim that style is accurate
+
+		From Jeb:  *Node  top of the tree
+		--public--
+		parse()	//takes in string for a single function/subfunction/parameter
+		eval()
+		eval_function()
+		eval_gradient()
+		get_precision()
+		set_precision()
+		
+
+		--private--
+                Function *gradient //Is this allowed -- classes contain instances of their own type?  If not, maybe gradients are stored at the system level?
+ 		//eval_tree *gradient if we break eval_tree off as its own class.
+
+                int *variable_dependencies //list of variables (indices in "variables" array at the system level?) -- empty for parameters
+		int *subfunction_dependencies //ditto, for "subfunctions" array -- empty for parameters
+		int *parameter_dependencies //ditto, for "parameters" array -- empty for parameters
+		int *number_dependencies //perhaps not necessary?		
+		
+		int type //Maybe not int - indicates subfunction, function, parameter, etc. - maybe those are derived classes?
+	}
+	
+
+
+@enduml

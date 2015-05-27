@@ -1,0 +1,37 @@
+@startuml
+title Function class
+
+
+	class Function {
+		--public--
+		parse()	//takes in string for a single function/subfunction/parameter
+		eval()
+		eval_function()
+		eval_gradient_wrt_vars()
+		eval_gradient_wrt_params()
+		get_precision()
+		set_precision()
+		
+
+		--private--
+       		//NO actual function data is kept at the Function level (other than name) - just instructions (Eval_trees) and pointers to data at system level.
+
+		Eval_tree function
+                Eval_tree partial //One set of instructions for all partials (wrt vars and wrt params)?  If so, how do we designate (at node level) that some derivative value should be looked up? 
+
+		char *name	
+		bool parameter_function //1 if function defines explicit_parameter -- only numbers and pathvariables allowed! 
+		bool constant //1 if this is an expression defining some (named) constant (treated as a subfunction)
+
+		//The following are potentially useful for copying and simplifying differentiation.  Other paradigms could work, too.
+		bool *variable_dependencies
+		bool *implicit_parameter_dependencies
+		bool *explicit_parameter_dependencies
+		bool pathvariable_dependencies //dependency would be better grammatically, worsein terms of consistency
+		bool *number_dependencies
+		bool *subfunction_dependencies
+	}
+	
+
+
+@enduml

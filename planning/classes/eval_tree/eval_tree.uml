@@ -1,11 +1,10 @@
 @startuml
-title Function Class and Nodes
+title Eval_tree Class 
 
 
 
 
 
-	Function o-- Node
 	
 	Node <|-- BinaryOperator
 	Node <|-- UnaryOperator
@@ -25,8 +24,10 @@ title Function Class and Nodes
 	
 	Symbol <|-- Variable
 	Symbol <|-- PathVariable
-	Symbol <|-- Coefficient
-	
+	Symbol <|-- ExplicitParameter
+	Symbol <|-- ImplicitParameter
+	Symbol <|-- Subfunction
+	Symbol <|-- Number	
 	 
 	 
 	 
@@ -70,7 +71,10 @@ title Function Class and Nodes
 		-std::vector<Node*> nodes_
 	}
 	interface Symbol {
-	why do we need this?
+	shared (?) pointer to the appropriate array at the system level
+	how do we mark whether we intend to point at the actual value V or the derivative value dV??
+	(For example, for f=x*y, we will have an eval_tree for df, i.e., x*dy + y*dx. ) 
+	(Similarly, if x and y in the previous line are subfuctions, we need to point at the partial there somehow.)
 	}
 
 	
@@ -101,43 +105,9 @@ title Function Class and Nodes
 	}
 
 
-
-
-
-	
-	
-	class Variable {
-	}
 	
 	
 	
-	class Function {
-		A function is more than a tree, so perhaps this diagram should be adapted?
-		Perhaps a function class that contains one or more instances of an eval_tree class as a member?
-
-		WARNING:  No claim that style is accurate
-
-		From Jeb:  *Node  top of the tree
-		--public--
-		parse()	//takes in string for a single function/subfunction/parameter
-		eval()
-		eval_function()
-		eval_gradient()
-		get_precision()
-		set_precision()
-		
-
-		--private--
-                Function *gradient //Is this allowed -- classes contain instances of their own type?  If not, maybe gradients are stored at the system level?
- 		//eval_tree *gradient if we break eval_tree off as its own class.
-
-                int *variable_dependencies //list of variables (indices in "variables" array at the system level?) -- empty for parameters
-		int *subfunction_dependencies //ditto, for "subfunctions" array -- empty for parameters
-		int *parameter_dependencies //ditto, for "parameters" array -- empty for parameters
-		int *number_dependencies //perhaps not necessary?		
-		
-		int type //Maybe not int - indicates subfunction, function, parameter, etc. - maybe those are derived classes?
-	}
 	
 
 

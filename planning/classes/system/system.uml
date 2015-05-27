@@ -1,31 +1,78 @@
 
 @startuml
-title System Class
+title System class (with simple Name and Number classes)
 
 Interface System{
+NOTE: No longer a Homotopy class -- homotopies are now systems with parameters
 
 --public--
 parse() //takes input stream, breaks into declarations, functions, etc., and calls *.parse() on each
 eval()  //eval funcs and their gradients:  update prec on numbers, populate vars and pathvar, eval params, eval subfuncs (in order), eval funcs, eval Jv and Jp
 eval_system() //system only
-eval_Jacobian() //Jacobian only
+eval_Jacobian_wrt_vars() //evaluate Jacobian w.r.t. variables (Jv in B1)
+eval_Jacobian_wrt_params() //evaluate Jacobian w.r.t. parameters (Jp in B1)
 get_precision()
-set_precision()
-get_number_functions()
+set_precision() //perhaps propagated down to functions?
+get_number_regular_functions() //not parameter functions 
+get_number_parameter_functions() // for defining implicitly-defined parameter spaces
 get_number_variables()
+get_number_explicit_parameters() //used (in part) to determine which tracker could be used
+get_number_implicit_parameters() //used (in part) to determine which tracker could be used
+
 //SOME FUNCTIONS RELATED TO SOLUTIONS
 
+//NO CLAIM THAT THIS IS A COMPLETE LIST!
+
 --private--
-function *functions
-function *subfunctions //user-defined functions should be handled as subfunctions
-function *parameters  //depend only on pathvar (and numbers)
+Function *functions //marked as parameter-only or regular (bad word?)
+Function *subfunctions //user-defined functions should be handled as subfunctions; marked as parameter-only or regular
+Function *explicit_parameters  //appear as functions, depend only on pathvar (and numbers)
 
-symbol *variables //symbol might not be the right name
-symbol pathvariable
-symbol *numbers
+Name *variables //symbol might not be the right name
+Name *explicit_parameters
+Name pathvariable
 
-point *solutions  //stores all known solutions of system.  Perhaps not an array of points.  Might want more data stored directly with solutions, not at system level.
+Number *numbers //numbers that explicitly appear in the input stream.  Not constants - they are now treated as subfunctions (marked as constant).
+
+int precision //assuming we want a system to have its own precision ??
+
+Point *solutions  //stores all known solutions of system.  Perhaps not an array of point.  Unclear what all data is desirable here, if any. 
 }
 
+
+Interface Name{
+--public--
+get_name()
+get_value()
+get_precision()
+set_precision()
+
+--private--
+char *name
+int precision
+Complex value  //Just one type for double and mpfr (and others) or one "value" for each and a toggle to say which is active?
+}
+
+
+Interface Number{
+--public--
+get_exact_value()
+get_value()
+get_precision()
+set_precision()
+
+--private--
+char *exact_value //stored as string
+int precision
+Complex value //See note above, in Name
+}
+
+Interface Function{
+Large, so defined in its own file (../Function)
+}
+
+Interface Point{
+TBD
+}
 
 @enduml
